@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "../deepcraft-audit"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.sql": "sql",
+			"Makefile": "makefile",
+			"Dockerfile": "dockerfile"
+		},
+		"terminal.integrated.defaultProfile.linux": "bash"
+	}
+}
