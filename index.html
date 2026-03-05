@@ -46,17 +46,15 @@
         }
 
         .nav-logo {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text);
+            display: inline-flex;
+            align-items: center;
             text-decoration: none;
-            letter-spacing: -0.02em;
+            flex-shrink: 0;
         }
 
-        .nav-logo span {
-            background: linear-gradient(135deg, var(--blue), var(--purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .nav-logo img {
+            height: 44px;
+            width: auto;
         }
 
         .nav-links {
@@ -533,20 +531,21 @@
 
 <!-- NAV -->
 <nav id="nav">
-    <a href="#" class="nav-logo">DeepCraft <span>Data</span></a>
+    <a href="#" class="nav-logo">
+        <img src="assets/deepcraft-logo-black.png" alt="DeepCraft Data">
+    </a>
     <ul class="nav-links">
         <li><a href="#product">Product</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#cases">Case Studies</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact" class="nav-cta">Work With Us</a></li>
+        <li><a href="#contact" class="nav-cta">Contact Us</a></li>
     </ul>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
     <div class="hero-inner">
-        <div class="hero-badge">20+ Years PostgreSQL Expertise</div>
+        <div class="hero-badge">20+ Years Database Expertise</div>
         <h1 class="hero-h1">
             PostgreSQL expertise —<br>
             <span class="grad">from audit to architecture</span>
@@ -558,7 +557,7 @@
         </p>
         <div class="hero-ctas">
             <a href="https://app.deepcraftdata.com" class="btn-primary">Try DeepCraft Audit</a>
-            <a href="#contact" class="btn-secondary">Work With Us</a>
+            <a href="#contact" class="btn-secondary">Contact Us</a>
         </div>
     </div>
 </section>
@@ -684,28 +683,6 @@
         </div>
     </div>
 </div>
-
-<!-- ABOUT -->
-<section id="about">
-    <div class="wrap" style="padding-top:0; padding-bottom:0;">
-        <div class="section-label">About</div>
-        <h2 class="section-title">The person behind the work</h2>
-        <div class="about-card">
-            <div class="about-left">
-                <div class="about-avatar">👤</div>
-                <div class="about-name">Burcin Yazici</div>
-                <div class="about-title">Founder · PostgreSQL Specialist</div>
-                <a href="https://www.linkedin.com/in/burcinyazici/" target="_blank" rel="noopener" class="linkedin-btn">
-                    in&nbsp; LinkedIn
-                </a>
-            </div>
-            <div class="about-text">
-                <p>With 20+ years of PostgreSQL expertise, I've worked with startups and mid-size companies on their most critical database challenges — from architecture decisions to production incidents.</p>
-                <p>DeepCraft Data is the product of that experience. The audit tool was born from problems I kept solving manually for clients. Now it's automated, agentless, and available to any team — whether they work with me or not.</p>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- CONTACT -->
 <div id="contact" class="alt-bg">
