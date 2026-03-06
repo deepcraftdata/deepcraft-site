@@ -1,0 +1,118 @@
+---
+import Base from './Base.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  readingTime: number;
+  prevPost?: { slug: string; title: string };
+  nextPost?: { slug: string; title: string };
+}
+
+const { post, readingTime, prevPost, nextPost } = Astro.props;
+const { title, date, summary, tags } = post.data;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric'
+});
+---
+
+<Base title={`${title} — DeepCraft Blog`} description={summary}>
+  <article style="max-width: 740px; margin: 0 auto; padding: 3rem 1.5rem;">
+
+    <!-- Header -->
+    <header style="margin-bottom: 2.5rem;">
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+        {tags.map((tag) => (
+          <a
+            href={`/blog/tags/${tag}`}
+            style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);padding:0.25rem 0.75rem;border-radius:999px;text-decoration:none;"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+
+      <h1 style="font-size:2.25rem;font-weight:800;line-height:1.2;letter-spacing:-0.02em;color:var(--text);margin:0 0 1rem;">
+        {title}
+      </h1>
+
+      <p style="font-size:1.05rem;color:var(--muted);line-height:1.65;margin:0 0 1.5rem;">
+        {summary}
+      </p>
+
+      <div style="display:flex;align-items:center;gap:1rem;color:var(--dim);font-size:0.85rem;padding-top:1rem;border-top:1px solid var(--card-border);">
+        <span>{formattedDate}</span>
+        <span>&middot;</span>
+        <span>{readingTime} min read</span>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="prose prose-invert max-w-none">
+      <slot />
+    </div>
+
+    <!-- CTA -->
+    <div style="
+      margin-top: 4rem;
+      padding: 2rem;
+      background: rgba(59,130,246,0.06);
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 14px;
+      text-align: center;
+    ">
+      <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue);margin-bottom:0.75rem;">
+        DeepCraft Audit
+      </div>
+      <h3 style="font-size:1.2rem;font-weight:700;margin:0 0 0.75rem;color:var(--text);">
+        Is your PostgreSQL healthy?
+      </h3>
+      <p style="color:var(--muted);font-size:0.9rem;margin:0 0 1.5rem;line-height:1.6;">
+        Get an instant health report — cache performance, bloat, slow queries, cost impact.
+        No agent, read-only connection, 5-minute setup.
+      </p>
+      <a
+        href="https://app.deepcraftdata.com"
+        style="display:inline-block;padding:0.75rem 1.75rem;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.95rem;"
+      >
+        Run Your First Audit — Free
+      </a>
+    </div>
+
+    <!-- Post navigation -->
+    {(prevPost || nextPost) && (
+      <nav style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:3rem;">
+        {prevPost ? (
+          <a
+            href={`/blog/${prevPost.slug}`}
+            style="padding:1rem 1.25rem;background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;text-decoration:none;transition:border-color 0.2s;"
+            onmouseover="this.style.borderColor='rgba(59,130,246,0.3)'"
+            onmouseout="this.style.borderColor='var(--card-border)'"
+          >
+            <div style="font-size:0.75rem;color:var(--dim);margin-bottom:0.35rem;">&larr; Previous</div>
+            <div style="font-size:0.9rem;color:var(--text);font-weight:600;line-height:1.4;">{prevPost.title}</div>
+          </a>
+        ) : <div />}
+        {nextPost ? (
+          <a
+            href={`/blog/${nextPost.slug}`}
+            style="padding:1rem 1.25rem;background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;text-decoration:none;text-align:right;transition:border-color 0.2s;"
+            onmouseover="this.style.borderColor='rgba(59,130,246,0.3)'"
+            onmouseout="this.style.borderColor='var(--card-border)'"
+          >
+            <div style="font-size:0.75rem;color:var(--dim);margin-bottom:0.35rem;">Next &rarr;</div>
+            <div style="font-size:0.9rem;color:var(--text);font-weight:600;line-height:1.4;">{nextPost.title}</div>
+          </a>
+        ) : <div />}
+      </nav>
+    )}
+
+    <div style="margin-top:2rem;text-align:center;">
+      <a href="/blog" style="color:var(--muted);text-decoration:none;font-size:0.9rem;">
+        &larr; All posts
+      </a>
+    </div>
+
+  </article>
+</Base>

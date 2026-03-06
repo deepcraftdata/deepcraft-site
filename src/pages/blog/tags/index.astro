@@ -1,0 +1,44 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+const tagCounts: Record<string, number> = {};
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCounts[tag] = (tagCounts[tag] ?? 0) + 1;
+  }
+}
+const tags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+---
+
+<Base title="Tags — DeepCraft Blog">
+  <div style="max-width:740px;margin:0 auto;padding:3rem 1.5rem;">
+    <h1 style="font-size:2rem;font-weight:800;letter-spacing:-0.02em;margin:0 0 0.5rem;">Tags</h1>
+    <p style="color:var(--muted);margin:0 0 3rem;">{posts.length} posts, {tags.length} tags</p>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      {tags.map(([tag, count]) => (
+        <a
+          href={`/blog/tags/${tag}`}
+          style="
+            display:inline-flex;align-items:center;gap:0.5rem;
+            padding:0.5rem 1.1rem;
+            background:var(--card-bg);border:1px solid var(--card-border);
+            border-radius:999px;text-decoration:none;
+            color:var(--text);font-size:0.9rem;font-weight:600;
+            transition:border-color 0.2s,color 0.2s;
+          "
+          onmouseover="this.style.borderColor='rgba(59,130,246,0.35)';this.style.color='var(--blue)'"
+          onmouseout="this.style.borderColor='var(--card-border)';this.style.color='var(--text)'"
+        >
+          {tag}
+          <span style="
+            background:rgba(59,130,246,0.12);color:var(--blue);
+            border-radius:999px;padding:0.1rem 0.5rem;font-size:0.75rem;
+          ">{count}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Base>

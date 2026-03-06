@@ -1,0 +1,75 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+  const tagMap: Record<string, typeof posts> = {};
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      if (!tagMap[tag]) tagMap[tag] = [];
+      tagMap[tag].push(post);
+    }
+  }
+
+  return Object.entries(tagMap).map(([tag, tagPosts]) => ({
+    params: { tag },
+    props: { tag, posts: tagPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()) },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+
+function readingTime(body: string): number {
+  return Math.ceil(body.split(/\s+/).length / 200);
+}
+---
+
+<Base title={`#${tag} — DeepCraft Blog`}>
+  <div style="max-width:740px;margin:0 auto;padding:3rem 1.5rem;">
+    <a href="/blog/tags" style="color:var(--dim);text-decoration:none;font-size:0.85rem;">&larr; All tags</a>
+
+    <div style="display:flex;align-items:center;gap:1rem;margin:1.5rem 0 2.5rem;">
+      <span style="
+        font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+        color:var(--blue);background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);
+        padding:0.35rem 0.9rem;border-radius:999px;
+      ">{tag}</span>
+      <span style="color:var(--dim);font-size:0.9rem;">{posts.length} post{posts.length !== 1 ? 's' : ''}</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1.25rem;">
+      {posts.map((post) => {
+        const rt = readingTime(post.body);
+        const dateStr = post.data.date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+        return (
+          <a
+            href={`/blog/${post.slug}`}
+            style="
+              display:flex;flex-direction:column;
+              padding:1.5rem;
+              background:var(--card-bg);border:1px solid var(--card-border);
+              border-radius:12px;text-decoration:none;
+              transition:border-color 0.2s,transform 0.2s;
+            "
+            onmouseover="this.style.borderColor='rgba(59,130,246,0.25)';this.style.transform='translateY(-1px)'"
+            onmouseout="this.style.borderColor='var(--card-border)';this.style.transform='translateY(0)'"
+          >
+            <h2 style="font-size:1rem;font-weight:700;color:var(--text);line-height:1.4;margin:0 0 0.5rem;">
+              {post.data.title}
+            </h2>
+            <p style="font-size:0.875rem;color:var(--dim);line-height:1.6;margin:0 0 1rem;">
+              {post.data.summary}
+            </p>
+            <div style="font-size:0.78rem;color:var(--dim);display:flex;gap:0.75rem;">
+              <span>{dateStr}</span>
+              <span>&middot;</span>
+              <span>{rt} min read</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</Base>

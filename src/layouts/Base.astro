@@ -1,0 +1,100 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description = 'PostgreSQL insights from 20+ years in the trenches — by DeepCraft Data.', ogImage } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+  <link rel="alternate" type="application/rss+xml" title="DeepCraft Blog" href="/rss.xml" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  {ogImage && <meta property="og:image" content={ogImage} />}
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+</head>
+<body>
+
+<nav id="nav" style="
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: rgba(10,14,26,0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--card-border);
+  transition: box-shadow 0.3s;
+">
+  <a href="https://deepcraftdata.com" style="display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;">
+    <img
+      src="/assets/deepcraft-logo-black.png"
+      alt="DeepCraft Data"
+      style="height:44px;width:auto;filter:brightness(0) invert(1);"
+    />
+  </a>
+  <ul style="display:flex;gap:2rem;list-style:none;align-items:center;margin:0;padding:0;">
+    <li><a href="/blog" style="color:var(--muted);text-decoration:none;font-size:0.9rem;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Blog</a></li>
+    <li><a href="/blog/tags" style="color:var(--muted);text-decoration:none;font-size:0.9rem;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Tags</a></li>
+    <li><a href="https://app.deepcraftdata.com" style="padding:0.5rem 1.25rem;background:linear-gradient(135deg,var(--blue),var(--purple));color:white;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.9rem;">Try Free</a></li>
+  </ul>
+</nav>
+
+<main style="padding-top: 5rem;">
+  <slot />
+</main>
+
+<footer style="
+  border-top: 1px solid var(--card-border);
+  padding: 2rem;
+  text-align: center;
+  color: var(--dim);
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 4rem;
+">
+  <div>
+    <a href="https://deepcraftdata.com" style="color:var(--dim);text-decoration:none;">deepcraftdata.com</a>
+    &nbsp;·&nbsp;
+    <a href="mailto:info@deepcraftdata.com" style="color:var(--dim);text-decoration:none;">info@deepcraftdata.com</a>
+    &nbsp;·&nbsp;
+    <a href="/rss.xml" style="color:var(--dim);text-decoration:none;">RSS</a>
+  </div>
+  <div>&copy; {new Date().getFullYear()} DeepCraft Data, LLC. All rights reserved.</div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('nav');
+    if (nav) {
+      nav.style.boxShadow = window.scrollY > 10 ? '0 2px 20px rgba(0,0,0,0.5)' : 'none';
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Collect all tags with counts
+const tagCounts: Record<string, number> = {};
+for (const post of allPosts) {
+  for (const tag of post.data.tags) {
+    tagCounts[tag] = (tagCounts[tag] ?? 0) + 1;
+  }
+}
+const tags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+
+function readingTime(body: string): number {
+  const words = body.split(/\s+/).length;
+  return Math.ceil(words / 200);
+}
+---
+
+<Base title="Blog — DeepCraft Data" description="PostgreSQL insights from 20+ years in the trenches. Performance, reliability, cost — in plain English.">
+
+  <!-- Hero -->
+  <section style="
+    min-height: 40vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5rem 2rem 3rem;
+    position: relative;
+    overflow: hidden;
+  ">
+    <div style="
+      position: absolute;
+      top: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse, rgba(59,130,246,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    "></div>
+    <div style="position:relative;max-width:640px;">
+      <div style="
+        display:inline-flex;align-items:center;
+        background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);
+        color:var(--blue);padding:0.35rem 1rem;border-radius:999px;
+        font-size:0.78rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;
+        margin-bottom:1.5rem;
+      ">PostgreSQL Intelligence</div>
+      <h1 style="font-size:2.75rem;font-weight:800;line-height:1.15;letter-spacing:-0.03em;margin:0 0 1rem;">
+        From the
+        <span style="background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+          trenches
+        </span>
+      </h1>
+      <p style="font-size:1.05rem;color:var(--muted);line-height:1.65;margin:0;">
+        Real-world PostgreSQL insights — performance, reliability, cost impact.
+        No filler, no theory. Written by a DBA with 20+ years in production.
+      </p>
+    </div>
+  </section>
+
+  <div style="max-width:1100px;margin:0 auto;padding:0 2rem 6rem;">
+
+    <!-- Tags filter -->
+    {tags.length > 0 && (
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:3rem;">
+        {tags.map(([tag, count]) => (
+          <a
+            href={`/blog/tags/${tag}`}
+            style="
+              display:inline-flex;align-items:center;gap:0.4rem;
+              padding:0.3rem 0.85rem;
+              background:var(--card-bg);border:1px solid var(--card-border);
+              border-radius:999px;text-decoration:none;
+              color:var(--muted);font-size:0.8rem;font-weight:600;
+              transition:border-color 0.2s,color 0.2s;
+            "
+            onmouseover="this.style.borderColor='rgba(59,130,246,0.3)';this.style.color='var(--blue)'"
+            onmouseout="this.style.borderColor='var(--card-border)';this.style.color='var(--muted)'"
+          >
+            {tag}
+            <span style="color:var(--dim);font-size:0.75rem;">({count})</span>
+          </a>
+        ))}
+      </div>
+    )}
+
+    <!-- Post grid -->
+    {allPosts.length === 0 ? (
+      <p style="color:var(--dim);text-align:center;padding:4rem 0;">No posts yet — check back soon.</p>
+    ) : (
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;">
+        {allPosts.map((post) => {
+          const rt = readingTime(post.body);
+          const dateStr = post.data.date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+          return (
+            <a
+              href={`/blog/${post.slug}`}
+              style="
+                display:flex;flex-direction:column;
+                padding:1.75rem;
+                background:var(--card-bg);border:1px solid var(--card-border);
+                border-radius:14px;text-decoration:none;
+                transition:border-color 0.2s,transform 0.2s;
+              "
+              onmouseover="this.style.borderColor='rgba(59,130,246,0.25)';this.style.transform='translateY(-2px)'"
+              onmouseout="this.style.borderColor='var(--card-border)';this.style.transform='translateY(0)'"
+            >
+              {post.data.tags.length > 0 && (
+                <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1rem;">
+                  {post.data.tags.slice(0, 2).map((tag) => (
+                    <span style="font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <h2 style="font-size:1.05rem;font-weight:700;color:var(--text);line-height:1.4;margin:0 0 0.75rem;flex:1;">
+                {post.data.title}
+              </h2>
+              <p style="font-size:0.875rem;color:var(--dim);line-height:1.6;margin:0 0 1.25rem;">
+                {post.data.summary}
+              </p>
+              <div style="font-size:0.78rem;color:var(--dim);display:flex;gap:0.75rem;">
+                <span>{dateStr}</span>
+                <span>&middot;</span>
+                <span>{rt} min read</span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    )}
+  </div>
+
+</Base>

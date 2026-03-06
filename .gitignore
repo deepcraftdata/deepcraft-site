@@ -1,1 +1,7 @@
 deepcraft-audit.code-workspace
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
