@@ -511,6 +511,7 @@
             .product-grid  { grid-template-columns: repeat(2, 1fr); }
             .cases-grid    { grid-template-columns: 1fr; }
             .about-card    { grid-template-columns: 1fr; text-align: center; }
+            .blog-grid     { grid-template-columns: 1fr !important; }
         }
 
         @media (max-width: 640px) {
@@ -693,12 +694,29 @@
         <div class="section-label">Blog</div>
         <h2 class="section-title">PostgreSQL insights from the trenches</h2>
         <p class="section-sub">Real-world performance, reliability, and cost deep-dives — written by a DBA with 20+ years in production.</p>
-        <a href="/blog" class="pf-card" style="display:block;text-decoration:none;max-width:480px;">
-            <div class="pf-icon">✍️</div>
-            <h3>Read the Blog</h3>
-            <p>No filler, no theory. Cache hit ratios, index tuning, upgrade risks, cost impact — practical guides you can act on today.</p>
-            <div style="margin-top:1rem;font-size:0.85rem;color:var(--blue);font-weight:600;">Read all posts →</div>
-        </a>
+        <div class="blog-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem;">
+            <a href="/blog/postgresql-audit-5-minutes" style="text-decoration:none;" class="pf-card">
+                <div style="font-size:0.75rem;color:var(--blue);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;">Audit · Mar 13, 2026</div>
+                <h3 style="margin:0 0 .75rem;font-size:1.05rem;line-height:1.4;">How to Run a PostgreSQL Audit in 5 Minutes</h3>
+                <p style="margin:0;font-size:0.875rem;color:var(--muted);line-height:1.6;">A PostgreSQL audit doesn't have to be a multi-day project. Here are the five queries that surface 80% of production issues.</p>
+                <div style="margin-top:1rem;font-size:0.82rem;color:var(--blue);font-weight:600;">Read more →</div>
+            </a>
+            <a href="/blog/postgresql-health-checklist-startup-cto" style="text-decoration:none;" class="pf-card">
+                <div style="font-size:0.75rem;color:var(--blue);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;">Checklist · Mar 13, 2026</div>
+                <h3 style="margin:0 0 .75rem;font-size:1.05rem;line-height:1.4;">PostgreSQL Health Checklist for Startup CTOs</h3>
+                <p style="margin:0;font-size:0.875rem;color:var(--muted);line-height:1.6;">Your database still works — but something's off. This checklist covers what to check before you reach for a bigger instance.</p>
+                <div style="margin-top:1rem;font-size:0.82rem;color:var(--blue);font-weight:600;">Read more →</div>
+            </a>
+            <a href="/blog/postgresql-hidden-costs" style="text-decoration:none;" class="pf-card">
+                <div style="font-size:0.75rem;color:var(--blue);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;">Cost · Mar 12, 2026</div>
+                <h3 style="margin:0 0 .75rem;font-size:1.05rem;line-height:1.4;">Is Your PostgreSQL Silently Costing You Thousands?</h3>
+                <p style="margin:0;font-size:0.875rem;color:var(--muted);line-height:1.6;">Your database bill keeps climbing, but your feature list hasn't changed. Here's how hidden inefficiencies translate into real money.</p>
+                <div style="margin-top:1rem;font-size:0.82rem;color:var(--blue);font-weight:600;">Read more →</div>
+            </a>
+        </div>
+        <div style="text-align:center;margin-top:2rem;">
+            <a href="/blog" style="font-size:0.9rem;color:var(--blue);font-weight:600;text-decoration:none;">View all posts →</a>
+        </div>
     </div>
 </section>
 
